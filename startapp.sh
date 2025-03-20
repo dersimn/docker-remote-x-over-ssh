@@ -12,4 +12,21 @@ if [ -z "$REMOTE_COMMAND" ]; then
   exit 2
 fi
 
-exec ssh "$SSH_TARGET" "$REMOTE_COMMAND"
+ssh "$SSH_TARGET" "$REMOTE_COMMAND" &
+SSH_PID=$!
+
+echo "Started SSH session with PID: $SSH_PID"
+
+is_window_open() {
+    xprop -root _NET_CLIENT_LIST | grep -q "0x"
+    return $?
+}
+
+# Keep checking for the VMware window
+while sleep 5; do
+    if ! is_window_open; then
+        echo "All windows closed. Exiting SSH..."
+        kill $SSH_PID
+        exit 0
+    fi
+done

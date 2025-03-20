@@ -10,7 +10,8 @@ RUN set-cont-env APP_NAME "SSH X11"
 
 # Packages
 RUN add-pkg \
-        openssh-client
+        openssh-client \
+        xprop
 
 # Copy files
 COPY startapp.sh  /startapp.sh
