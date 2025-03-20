@@ -34,7 +34,25 @@ See [jlesage/docker-baseimage-gui](https://github.com/jlesage/docker-baseimage-g
     docker buildx use mybuilder
 
     docker buildx build \
-        --platform linux/amd64,linux/arm64 \
+        --platform linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64 \
         -t dersimn/remote-x-over-ssh \
         --push \
         .
+
+## GitHub Actions
+
+1) Create personal access token with permissions:
+
+- Fine-grained token:
+    - Contents: read/write
+    - Pull requests: read/write
+    - (Basically the same that you specify in GitHub Actions YAML under `permissions:`.)
+- Classic Token needs only scope `repo`
+
+Save under `Settings > Secrets and Variables > Dependabot` or use 
+
+    gh secret set PERSONAL_ACCESS_TOKEN --body '<TOKEN>' --app dependabot
+
+2) Create Token to access Docker Hub, save under `Settings > Secrets and Variables > Actions` or use
+
+    gh secret set DOCKERHUB_TOKEN --body '<TOKEN>'
